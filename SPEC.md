@@ -1140,7 +1140,7 @@ The deck starts full. Each roll by a player:
 2. **Weights**: each total `k` weighs `c_k / T * max(0, 1 - 0.34 * a_k)`, where `c_k` is the number of cards of total `k` left, `T` the cards left, and `a_k` the number of times `k` came up in the last 5 rolls.
 3. **Seven balancing** (2 or more players): the weight of 7 is multiplied by `clamp(imbalance + streak, 0, 2)`.
    - `streak` is `0.4 * n` for a run of `n` sevens by one player, negative when the roller owns the run. A seven by the same player extends the run, a seven by another player starts a new run of 1, and other totals leave it as it is.
-   - `imbalance` is `1 + (1/P - s/S) / (1/P)`, where `P` is the number of players, `S` the sevens rolled so far and `s` the roller's share of them; it is 1 until `S` reaches `P`.
+   - `imbalance` is `1 + (1/P - s/S) / (1/P)`, where `P` is the number of players, `S` the sevens rolled so far and `s` the roller's sevens among them; it is 1 until `S` reaches `P`.
 4. **Draw**: a total is drawn in proportion to its weight and a card of that total uniformly; the card leaves the deck and its `(die1, die2)` is the roll.
 
 This follows colonist.io's balanced dice ([designing balanced dice](https://blog.colonist.io/designing-balanced-dice/), [balancing 7s](https://blog.colonist.io/balancing-7s-on-1v1/) and the code the second post links).
@@ -1200,7 +1200,7 @@ When serving state to a specific player, implementations SHOULD:
 2. Replace other players' `hand` with `{"cardCount": N}` (total count only)
 3. Replace other players' `devCards` with `{"cardCount": N}`
 4. Omit `victoryPoints` for other players (only show `publicVictoryPoints`)
-5. Omit `balancedDice.deck`
+5. Replace `balancedDice` with `{"remaining": N}`, the number of dice cards left
 6. Redact private fields in events (replace with `null` or omit)
 
 ### Public Card Counts

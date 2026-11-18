@@ -6,6 +6,7 @@
 from __future__ import annotations
 
 import json
+import pathlib
 import random
 import unittest
 
@@ -56,6 +57,13 @@ class BalancedDiceTest(unittest.TestCase):
         self.assertIsNotNone(state.balanced_dice)
         self.assertIn("balancedDice", to_json(state))
         self.assertIsNotNone(round_trip(state).balanced_dice)
+
+    def test_schema_lists_the_dice_state_the_server_writes(self):
+        schema = json.loads((pathlib.Path(__file__).parents[1] / "openhex" / "schema.json")
+                            .read_text())
+        written = to_json(duel_state())["balancedDice"]
+        self.assertEqual(set(schema["$defs"]["BalancedDice"]["properties"]), set(written))
+        self.assertEqual(set(schema["$defs"]["BalancedDice"]["required"]), set(written))
 
     def test_rolls_come_from_a_deck_across_json_round_trips(self):
         # The server loads the state from JSON before every action. A deck of
