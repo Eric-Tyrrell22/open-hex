@@ -330,7 +330,7 @@
 
     "BalancedDice": {
       "type": "object",
-      "description": "State for balanced dice mode (36-card deck, reshuffled every 25 draws).",
+      "description": "State for balanced dice mode: the 36-card deck with recency and seven balancing (SPEC section 10). A player's view replaces it with {\"remaining\": N}.",
       "properties": {
         "deck": {
           "type": "array",
@@ -341,9 +341,24 @@
             "maxItems": 2
           }
         },
-        "drawCount": { "type": "integer" }
+        "recentRolls": {
+          "type": "array",
+          "items": { "type": "integer", "minimum": 2, "maximum": 12 },
+          "maxItems": 5
+        },
+        "sevensByPlayer": {
+          "type": "object",
+          "additionalProperties": { "type": "integer", "minimum": 0 }
+        },
+        "sevenStreakPlayer": {
+          "oneOf": [
+            { "$ref": "#/$defs/PlayerColor" },
+            { "type": "null" }
+          ]
+        },
+        "sevenStreakCount": { "type": "integer", "minimum": 0 }
       },
-      "required": ["deck", "drawCount"],
+      "required": ["deck", "recentRolls", "sevensByPlayer", "sevenStreakPlayer", "sevenStreakCount"],
       "additionalProperties": false
     },
 
